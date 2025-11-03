@@ -1,0 +1,43 @@
+{
+	"name": "@datazone/api",
+	"version": "0.0.0",
+	"type": "module",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./services/*": {
+			"types": "./src/services/*.ts",
+			"default": "./src/services/*.ts"
+		},
+		"./types/*": {
+			"types": "./src/types/*.ts",
+			"default": "./src/types/*.ts"
+		},
+		"./schemas/*": {
+			"types": "./src/schemas/*.ts",
+			"default": "./src/schemas/*.ts"
+		}
+	},
+	"scripts": {
+		"build": "tsdown",
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"zod": "catalog:",
+		"dotenv": "catalog:",
+		"@datazone/db": "workspace:*",
+		"nanoid": "^5.1.6",
+		"bullmq": "^5.63.0",
+		"ioredis": "^5.8.2"
+	},
+	"devDependencies": {
+		"typescript": "catalog:",
+		"@types/bun": "^1.2.6",
+		"tsdown": "catalog:"
+	}
+}
+

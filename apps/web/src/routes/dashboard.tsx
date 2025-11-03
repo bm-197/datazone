@@ -1,8 +1,11 @@
 import { authClient } from "@/lib/auth-client";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const Route = createFileRoute("/dashboard")({
-	component: RouteComponent,
+	component: DashboardLayout,
 	beforeLoad: async () => {
 		const session = await authClient.getSession();
 		if (!session.data) {
@@ -15,13 +18,16 @@ export const Route = createFileRoute("/dashboard")({
 	},
 });
 
-function RouteComponent() {
+function DashboardLayout() {
 	const { session } = Route.useRouteContext();
-
+	
 	return (
-		<div>
-			<h1>Dashboard</h1>
-			<p>Welcome {session.data?.user.name}</p>
-		</div>
+		<SidebarProvider>
+			<AppSidebar session={session as any} />
+			<SidebarInset>
+				<SiteHeader />
+				<Outlet />
+			</SidebarInset>
+		</SidebarProvider>
 	);
 }

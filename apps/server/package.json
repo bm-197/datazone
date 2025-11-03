@@ -16,7 +16,8 @@
     "dotenv": "catalog:",
     "zod": "catalog:",
     "@datazone/auth": "workspace:*",
-    "@datazone/db": "workspace:*"
+    "@datazone/db": "workspace:*",
+    "@datazone/api": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:",
