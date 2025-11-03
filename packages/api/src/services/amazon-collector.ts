@@ -1,7 +1,6 @@
 import { ScraperAPIClient } from "./scraperapi-client.js";
 import type {
 	ProductData,
-	SearchResponse,
 	ReviewsResponse,
 } from "../types/scraperapi.js";
 import type { UsageTracker } from "./usage-tracker.js";

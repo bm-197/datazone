@@ -10,8 +10,11 @@ import {
 	JobScheduler,
 } from "@datazone/api";
 import { db, scrapeJobs, eq } from "@datazone/db";
+import { requireAuth } from "../middleware/auth.js";
 
 const router: ExpressRouter = Router();
+
+router.use(requireAuth);
 
 const apiKey = process.env.SCRAPERAPI_API_KEY || "";
 const client = new ScraperAPIClient(apiKey);

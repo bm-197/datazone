@@ -2,7 +2,6 @@ import type {
 	ProductData,
 	SearchResponse,
 	ReviewsResponse,
-	ScraperAPIError,
 } from "../types/scraperapi.js";
 import {
 	productDataSchema,
@@ -14,7 +13,7 @@ export class ScraperAPIClient {
 	private apiKey: string;
 	private baseUrl: string;
 
-	constructor(apiKey: string, baseUrl = "https://api.scraperapi.com") {
+	constructor(apiKey: string, baseUrl = `${process.env.SCRAPERAPI_API_KEY}`) {
 		this.apiKey = apiKey;
 		this.baseUrl = baseUrl;
 	}

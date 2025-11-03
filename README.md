@@ -1,6 +1,6 @@
 # datazone
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Router, Express, and more.
+This project was created with modern TypeScript stack that combines React, TanStack Router, Express, and more.
 
 ## Features
 
@@ -71,4 +71,6 @@ datazone/
 - `bun dev:server`: Start only the server
 - `bun check-types`: Check TypeScript types across all apps
 - `bun db:push`: Push schema changes to database
+- `bun db:generate`: Generate schema Migration file
+- `bun db:migrate`: Migrate schema changes to database
 - `bun db:studio`: Open database studio UI

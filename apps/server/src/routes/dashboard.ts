@@ -2,8 +2,11 @@ import { Router } from "express";
 import type { Router as ExpressRouter } from "express";
 import { db, products, prices, reviews, scrapeJobs, count, sql, gte, eq, desc, inArray } from "@datazone/db";
 import { UsageTracker, JobQueue } from "@datazone/api";
+import { requireAuth } from "../middleware/auth.js";
 
 const router: ExpressRouter = Router();
+
+router.use(requireAuth);
 
 const usageTracker = new UsageTracker(
   parseInt(process.env.SCRAPERAPI_FREE_TIER_LIMIT || "1000"),

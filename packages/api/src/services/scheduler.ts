@@ -2,7 +2,6 @@ import { JobQueue, type JobData } from "./job-queue.js";
 import type { AmazonCollector } from "./amazon-collector.js";
 import type { DataProcessor } from "./data-processor.js";
 import { db, scrapeJobs, eq, desc } from "@datazone/db";
-import { nanoid } from "nanoid";
 
 export interface ScheduleOptions {
 	cronPattern: string; // e.g., "0 */6 * * *" for every 6 hours

@@ -11,8 +11,11 @@ import {
 	type JobData,
 } from "@datazone/api";
 import { db, products, prices, reviews, scrapeJobs, eq, desc, and } from "@datazone/db";
+import { requireAuth } from "../middleware/auth.js";
 
 const router: ExpressRouter = Router();
+
+router.use(requireAuth);
 
 const apiKey = process.env.SCRAPERAPI_API_KEY || "";
 const client = new ScraperAPIClient(apiKey);
@@ -85,7 +88,6 @@ router.get("/", async (req, res) => {
 				) as any;
 		}
 
-		// Order by newest first (createdAt descending)
 		const allProducts = await query
 			.orderBy(desc(products.createdAt))
 			.limit(limit)
@@ -115,13 +117,15 @@ router.get("/:asin", async (req, res) => {
 	try {
 		const asin = req.params.asin;
 
-		const product = await db
+    const product = await db
 			.select()
 			.from(products)
 			.where(eq(products.asin, asin))
 			.limit(1);
 
-		if (product.length === 0) {
+        const [productRow] = product;
+
+        if (!productRow) {
 			return res.status(404).json({
 				success: false,
 				error: "Product not found",
@@ -131,21 +135,21 @@ router.get("/:asin", async (req, res) => {
 		const priceHistory = await db
 			.select()
 			.from(prices)
-			.where(eq(prices.productId, product[0].id))
+            .where(eq(prices.productId, productRow.id))
 			.orderBy(desc(prices.collectedAt))
 			.limit(30);
 
 		const productReviews = await db
 			.select()
 			.from(reviews)
-			.where(eq(reviews.productId, product[0].id))
+            .where(eq(reviews.productId, productRow.id))
 			.orderBy(desc(reviews.date))
 			.limit(50);
 
 		console.log(`[Products API] Product ${asin} - Found ${productReviews.length} reviews`);
 
-		res.json({
-			product: product[0],
+        res.json({
+            product: productRow,
 			priceHistory,
 			reviews: productReviews,
 		});
@@ -163,23 +167,25 @@ router.get("/:asin/prices", async (req, res) => {
 	try {
 		const asin = req.params.asin;
 
-		const product = await db
+    const product = await db
 			.select()
 			.from(products)
 			.where(eq(products.asin, asin))
 			.limit(1);
 
-		if (product.length === 0) {
+        const [productRow] = product;
+
+        if (!productRow) {
 			return res.status(404).json({
 				success: false,
 				error: "Product not found",
 			});
 		}
 
-		const priceHistory = await db
+        const priceHistory = await db
 			.select()
 			.from(prices)
-			.where(eq(prices.productId, product[0].id))
+            .where(eq(prices.productId, productRow.id))
 			.orderBy(desc(prices.collectedAt));
 
 		res.json({
@@ -201,31 +207,33 @@ router.get("/:asin/reviews", async (req, res) => {
 		const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
 		const offset = (page - 1) * limit;
 
-		const product = await db
+    const product = await db
 			.select()
 			.from(products)
 			.where(eq(products.asin, asin))
 			.limit(1);
 
-		if (product.length === 0) {
+        const [productRow] = product;
+
+        if (!productRow) {
 			return res.status(404).json({
 				success: false,
 				error: "Product not found",
 			});
 		}
 
-		const productReviews = await db
+        const productReviews = await db
 			.select()
 			.from(reviews)
-			.where(eq(reviews.productId, product[0].id))
+            .where(eq(reviews.productId, productRow.id))
 			.orderBy(desc(reviews.date))
 			.limit(limit)
 			.offset(offset);
 
-		const totalReviews = await db
+        const totalReviews = await db
 			.select()
 			.from(reviews)
-			.where(eq(reviews.productId, product[0].id));
+            .where(eq(reviews.productId, productRow.id));
 
 		console.log(`[Products API] Reviews endpoint for ${asin} - Found ${productReviews.length} reviews (page ${page})`);
 
