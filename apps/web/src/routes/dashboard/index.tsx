@@ -15,7 +15,9 @@ export const Route = createFileRoute("/dashboard/")({
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 async function fetchDashboardStats() {
-	const response = await fetch(`${API_URL}/api/dashboard/stats`);
+	const response = await fetch(`${API_URL}/api/dashboard/stats`, {
+		credentials: 'include',
+	});
 	if (!response.ok) {
 		throw new Error("Failed to fetch dashboard stats");
 	}

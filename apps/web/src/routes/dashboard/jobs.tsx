@@ -84,7 +84,9 @@ type Job = {
 };
 
 async function fetchJobs() {
-  const response = await fetch(`${API_URL}/api/jobs/list`);
+  const response = await fetch(`${API_URL}/api/jobs/list`, {
+    credentials: 'include',
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch jobs");
   }
@@ -92,7 +94,9 @@ async function fetchJobs() {
 }
 
 async function fetchUsage() {
-  const response = await fetch(`${API_URL}/api/usage`);
+  const response = await fetch(`${API_URL}/api/usage`, {
+    credentials: 'include',
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch usage");
   }
@@ -481,6 +485,7 @@ const createColumns = (refetch: () => void, actionLoading: Record<string, boolea
         try {
           const response = await fetch(`${API_URL}/api/jobs/${job.id}/suspend`, {
             method: "POST",
+            credentials: 'include',
           });
           if (!response.ok) {
             throw new Error("Failed to suspend job");
@@ -499,6 +504,7 @@ const createColumns = (refetch: () => void, actionLoading: Record<string, boolea
         try {
           const response = await fetch(`${API_URL}/api/jobs/${job.id}/resume`, {
             method: "POST",
+            credentials: 'include',
           });
           if (!response.ok) {
             throw new Error("Failed to resume job");

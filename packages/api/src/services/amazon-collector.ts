@@ -134,8 +134,8 @@ export class AmazonCollector {
 	 * Track price history by collecting product multiple times
 	 * Note: This would typically be done over time via scheduled jobs
 	 */
-	async collectPriceHistory(asin: string): Promise<ProductData> {
-		return this.collectProductByASIN({ asin });
+	async collectPriceHistory(asin: string): Promise<ProductData | null> {
+		return this.collectProductByASIN({ asin }) || null;
 	}
 
 	/**

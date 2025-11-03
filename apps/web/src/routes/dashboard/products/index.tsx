@@ -18,7 +18,9 @@ export const Route = createFileRoute("/dashboard/products/")({
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 async function fetchProducts(page = 1, limit = 20) {
-	const response = await fetch(`${API_URL}/api/products?page=${page}&limit=${limit}`);
+	const response = await fetch(`${API_URL}/api/products?page=${page}&limit=${limit}`, {
+		credentials: 'include',
+	});
 	if (!response.ok) {
 		throw new Error("Failed to fetch products");
 	}
@@ -38,15 +40,16 @@ function ProductsPage() {
 
 	const handleCollect = async () => {
 		try {
-			const response = await fetch(`${API_URL}/api/products/collect`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					keyword: search || undefined,
-				}),
-			});
+		const response = await fetch(`${API_URL}/api/products/collect`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: 'include',
+			body: JSON.stringify({
+				keyword: search || undefined,
+			}),
+		});
 
 			if (!response.ok) {
 				throw new Error("Failed to trigger collection");

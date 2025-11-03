@@ -32,17 +32,17 @@ export async function requireAuth(
 			}
 		}
 
-		// better-auth expects cookies in the cookie header
 		if (req.headers.cookie) {
 			headers.cookie = Array.isArray(req.headers.cookie) 
 				? req.headers.cookie.join('; ') 
 				: req.headers.cookie;
 		}
 
-		// Get session using better-auth's internal API
-		const session = await (auth as any).api.getSession({
-			headers,
+		const sessionResult = await (auth as any).api.getSession({
+			headers: headers as any,
 		});
+
+		const session = sessionResult?.data || sessionResult;
 
 		if (!session?.user) {
 			return res.status(401).json({

@@ -23,7 +23,9 @@ export const Route = createFileRoute("/dashboard/products/$asin")({
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 async function fetchProduct(asin: string) {
-	const response = await fetch(`${API_URL}/api/products/${asin}`);
+	const response = await fetch(`${API_URL}/api/products/${asin}`, {
+		credentials: 'include',
+	});
 	if (!response.ok) {
 		throw new Error("Failed to fetch product");
 	}
@@ -31,7 +33,9 @@ async function fetchProduct(asin: string) {
 }
 
 async function fetchReviews(asin: string) {
-	const response = await fetch(`${API_URL}/api/products/${asin}/reviews`);
+	const response = await fetch(`${API_URL}/api/products/${asin}/reviews`, {
+		credentials: 'include',
+	});
 	if (!response.ok) {
 		throw new Error("Failed to fetch reviews");
 	}
@@ -55,13 +59,14 @@ function ProductDetailPage() {
 	const handleRefresh = async () => {
 		setRefreshing(true);
 		try {
-			const response = await fetch(`${API_URL}/api/products/collect`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ asin }),
-			});
+		const response = await fetch(`${API_URL}/api/products/collect`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: 'include',
+			body: JSON.stringify({ asin }),
+		});
 
 			if (!response.ok) {
 				throw new Error("Failed to trigger refresh");
@@ -71,7 +76,6 @@ function ProductDetailPage() {
 			console.log("Collection job triggered:", result.jobId);
 
 			// Wait a bit for the job to process, then refetch
-			// Note: In production, you might want to poll the job status
 			setTimeout(async () => {
 				await refetch();
 				await refetchReviews();
